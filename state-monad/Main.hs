@@ -3,9 +3,12 @@ module Main where
 import           Control.Monad.Reader  (Reader, ask, local, runReader)
 import           Control.Monad.State   (State, StateT, evalState, execState,
                                         get, modify, put, runState)
+import           Control.Monad.Writer  (Writer, tell, runWriter, execWriter)
 import           Data.Foldable         (traverse_)
 import           Data.Functor.Identity
 import           Data.List             (intercalate)
+import           Data.Monoid           (Sum(..))
+import           Data.Word             (Word)
 
 test :: State Int Int
 test = do
@@ -16,11 +19,20 @@ test = do
 sumArray :: [Int] -> State Int ()
 sumArray = traverse_ (\n -> modify (\sum' -> sum' + n))
 
+sumArray' :: [Int] -> Writer (Sum Int) () 
+sumArray' = traverse_ (\n -> tell (Sum n))
+
 testSumArray :: IO ()
 testSumArray = print $ runState (do
                  sumArray [1, 2, 3]
                  sumArray [4, 5]
                  sumArray [6]) 0
+
+testSumArray' :: IO ()
+testSumArray' = print $ runWriter (do
+                 sumArray' [1, 2, 3]
+                 sumArray' [4, 5]
+                 sumArray' [6])
 
 -- | Determine if a string of parentheses is balanced.
 -- > testParens ""
@@ -89,6 +101,49 @@ testReader = renderDoc $ cat
       , indent $ line "I am even more indented"
       ]
   ]
+
+-- gcd :: Int -> Int -> Int
+-- gcd n 0 = n
+-- gcd 0 m = m
+-- gcd n m = if n > m
+--             then gcd (n - m) m
+--             else gcd n (m - n)
+
+gcdLog :: Int -> Int -> Writer [String] Int
+gcdLog n 0 = pure n
+gcdLog 0 m = pure m
+gcdLog n m = do
+  tell ["gcdLog " ++ show n ++ " " ++ show m]
+  if n > m
+    then gcdLog (n - m) m
+    else gcdLog n (m - n)
+
+-- Number of iterations for collatz sequence to reach 1.
+collatzNum :: Word -> Word 
+collatzNum x = collatz x
+  where
+    collatz :: Word -> Word
+    collatz 1 = 0
+    collatz n = case even n of
+        True  -> do
+          1 + collatz (n `quot` 2)
+        False -> do
+          1 + collatz (3 * n + 1)
+
+collatzNum' :: Word -> Writer [String] Word 
+collatzNum' x = collatz x
+  where
+    collatz :: Word -> Writer [String] Word
+    collatz 1 = do
+      tell [show 1]
+      pure 0
+    collatz n = case even n of
+        True  -> do
+          tell [show n]
+          (+ 1) <$> collatz (n `quot` 2)
+        False -> do
+          tell [show n]
+          (+ 1) <$> collatz (3 * n + 1)
 
 main :: IO ()
 main = print $ execState test 0
