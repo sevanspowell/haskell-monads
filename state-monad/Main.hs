@@ -140,10 +140,12 @@ collatzNum' x = collatz x
     collatz n = case even n of
         True  -> do
           tell [show n]
-          (+ 1) <$> collatz (n `quot` 2)
+          cnt <- collatz (n `quot` 2)
+          pure $ cnt + 1
         False -> do
           tell [show n]
-          (+ 1) <$> collatz (3 * n + 1)
+          cnt <- collatz (3 * n + 1)
+          pure $ cnt + 1
 
 main :: IO ()
 main = print $ execState test 0
