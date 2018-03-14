@@ -1,5 +1,7 @@
 module Main where
 
+import           Control.Applicative          (many, some, (<|>))
+import           Control.Monad                (guard)
 import           Control.Monad.Except         (catchError, throwError)
 import           Control.Monad.Reader         (Reader, ReaderT, ask, local,
                                                runReader, runReaderT)
@@ -11,6 +13,7 @@ import           Control.Monad.Trans.Except   (ExceptT, runExceptT)
 import           Control.Monad.Trans.Identity (IdentityT, runIdentityT)
 import           Control.Monad.Writer         (Writer, WriterT, execWriter,
                                                runWriter, runWriterT, tell)
+import           Data.Char                    (toLower, toUpper)
 import           Data.Foldable                (traverse_)
 import           Data.Functor.Identity
 import           Data.List                    (drop, intercalate, stripPrefix,
@@ -176,19 +179,19 @@ data Errors = EmptyString
 
 type Log = [String]
 
-type Parser = StateT String (ExceptT Errors (WriterT Log Identity))
+type Parser = StateT String (ExceptT [Errors] (WriterT Log Identity))
 
 split' :: Parser String
 split' = do
   s <- get
-  lift $ lift $ tell ["The state is " ++ show s]
+  tell ["The state is " ++ show s]
   case s of
-    "" -> lift $ throwError EmptyString
+    "" -> throwError [EmptyString]
     _  -> do
       put (drop 1 s)
       pure (take 1 s)
 
-runParser :: Parser a -> String -> (Either Errors (a, String), Log)
+runParser :: Parser a -> String -> (Either [Errors] (a, String), Log)
 runParser p s = runIdentity $ runWriterT $ runExceptT $ runStateT p s
 
 safeDivide :: (Fractional a, Eq a) => a -> a -> ExceptT String Identity a
@@ -245,6 +248,24 @@ testDoc = do
 
 testReader' :: String
 testReader' = renderDoc' testDoc
+
+upper :: Parser String
+upper = do
+  s <- split'
+  guard $ (toUpper <$> s) == s
+  pure s
+
+lower :: Parser String
+lower = do
+  s <- split'
+  guard $ (toLower <$> s) == s
+  pure s
+
+upperOrLower :: Parser [String]
+upperOrLower = some upper <|> some lower
+
+components :: Parser [[String]]
+components = many upperOrLower
 
 main :: IO ()
 main = print $ execState test 0
