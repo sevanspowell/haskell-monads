@@ -58,7 +58,8 @@ executable state-monad
   
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.9 && <4.10
-                       , mtl
+                     , mtl
+                     , transformers
   
   -- Directories containing source files.
   -- hs-source-dirs:      
