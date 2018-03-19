@@ -1,0 +1,60 @@
+
+./Setup.hs,15
+main main1,2
+
+./Main.hs,52
+module Main Main0,1
+main main2,3
+main main3,4
+
+./src/Main.hs,52
+module Main Main0,1
+main main2,3
+main main3,4
+
+./src/Data/GameEnvironment.hs,324
+module Data.GameEnvironment Data.GameEnvironment0,1
+type PlayerName PlayerName2,3
+data GameEnvironment GameEnvironment4,5
+data GameEnvironment = GameEnvironmentGameEnvironment4,5
+  { playerName playerName5,6
+  , debugMode debugMode6,7
+gameEnvironment gameEnvironment9,10
+gameEnvironment gameEnvironment10,11
+
+./src/Data/Coords.hs,246
+module Data.Coords Data.Coords0,1
+data Coords Coords4,5
+data Coords = CoordsCoords4,5
+  { x x5,6
+  , y y6,7
+coords coords10,11
+coords coords11,12
+prettyPrintCoords prettyPrintCoords13,14
+prettyPrintCoords prettyPrintCoords14,15
+
+./src/Data/GameItem.hs,194
+module Data.GameItem Data.GameItem0,1
+data GameItem GameItem4,5
+data GameItem = Candle Candle4,5
+data GameItem = Candle | MatchesMatches4,5
+readItem readItem7,8
+readItem readItem8,9
+
+./src/Data/GameState.hs,271
+module Data.GameState Data.GameState0,1
+data GameState GameState7,8
+data GameState = GameStateGameState7,8
+  { items items8,9
+  , player player9,10
+  , inventory inventory10,11
+initialGameState initialGameState13,14
+initialGameState initialGameState14,15
+
+./src/Game.hs,114
+type Log Log10,11
+type Game Game12,13
+has has14,15
+has has15,16
+pickUp pickUp19,20
+pickUp pickUp20,21
