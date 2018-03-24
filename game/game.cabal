@@ -45,16 +45,36 @@ extra-source-files:  ChangeLog.md
 -- Constraint on the version of Cabal needed to build this package.
 cabal-version:       >=1.10
 
+library
+  -- Modules included in this executable, other than Main.
+  exposed-modules:     Data.GameItem
+                     , Data.GameEnvironment
+                     , Data.GameState
+                     , Data.Coords
+
+  ghc-options:         -Wall
+                       -Werror
+                       -fno-warn-unused-binds
+                       -fno-warn-unused-do-bind
+                       -fno-warn-unused-imports
+                       -fno-warn-type-defaults
+                       -fwarn-incomplete-patterns
+                       -ferror-spans
+
+  build-depends:       base >=4.9 && <4.10
+                     , containers >= 0.5.7.1
+                     , mtl
+                     , transformers
+                     , split >= 0.2.3.1
+                     , haskeline >= 0.7
+
+  hs-source-dirs: src
+
+  default-language:    Haskell2010
+
 executable game
   -- .hs or .lhs file containing the Main module.
   main-is:             Main.hs
-  
-  -- Modules included in this executable, other than Main.
-  exposed-modules:       Game
-                       , Data.GameItem
-                       , Data.GameEnvironment
-                       , Data.GameState
-                       , Data.Coords
   
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:    
@@ -64,6 +84,9 @@ executable game
                      , containers >= 0.5.7.1
                      , mtl
                      , transformers
+                     , haskeline >= 0.7
+                     , split >= 0.2.3.1
+                     , game
   
   -- Directories containing source files.
   hs-source-dirs:      src
