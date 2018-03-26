@@ -67,6 +67,7 @@ library
                      , transformers
                      , split >= 0.2.3.1
                      , haskeline >= 0.7
+                     , ALUT
 
   hs-source-dirs: src
 
@@ -87,6 +88,7 @@ executable game
                      , haskeline >= 0.7
                      , split >= 0.2.3.1
                      , game
+                     , ALUT
   
   -- Directories containing source files.
   hs-source-dirs:      src
