@@ -38,6 +38,8 @@ maintainer:          samueldavid.ep@gmail.com
 
 build-type:          Simple
 
+data-files:          data/bachfugue.wav
+
 -- Extra files to be distributed with the package, such as examples or a 
 -- README.
 extra-source-files:  ChangeLog.md

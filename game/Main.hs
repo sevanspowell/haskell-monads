@@ -41,16 +41,16 @@ playSound =
     (Just device) <- openDevice Nothing
     (Just context) <- createContext device []
     currentContext $= Just context
-    buffer1 <- createBuffer $ Sine 440 0 1
-    buffer2 <- createBuffer HelloWorld
+    -- buffer1 <- createBuffer $ Sine 440 0 1
+    buffer2 <- createBuffer $ File "data/bachfugue.wav"
     [source] <- genObjectNames 1
-    queueBuffers source [buffer1,buffer2]
+    queueBuffers source [buffer2]
     play [source]
-    sleep 4
+    sleep 40
     closeDevice device
     return ()
 
 main :: IO ()
-main = runGame defaultEnv initialGameState
--- main = playSound
+-- main = runGame defaultEnv initialGameState
+main = playSound
 
