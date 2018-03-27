@@ -45,8 +45,12 @@ playSound =
     buffer2 <- createBuffer $ File "data/bachfugue.wav"
     [source] <- genObjectNames 1
     queueBuffers source [buffer2]
+    let
+      loopVar = loopingMode source
+    loopVar $= Looping
     play [source]
-    sleep 40
+    runGame defaultEnv initialGameState
+    -- sleep 40
     closeDevice device
     return ()
 
@@ -54,3 +58,6 @@ main :: IO ()
 -- main = runGame defaultEnv initialGameState
 main = playSound
 
+-- TODO Rewrite type of play sound to include a WriterT monad transform for logging
+-- TODO Create safe wrapper for OpenAL methods that handles exceptions in style of FP course.
+-- TODO Clean up code so logic is not so entangled
